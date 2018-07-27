@@ -5,6 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class Room : MonoBehaviour {
 
+    bool canReadLayers = false;
     public int roomID;
     public int totalLayers;
     public string roomName;
@@ -17,8 +18,8 @@ public class Room : MonoBehaviour {
     public Tilemap collisionLayer;
     public Tilemap triggerLayer;
     public List<Tilemap> layerTilemaps;
-    public Dictionary<Vector2Int, TileBase> tilesPosition;
-    public List<Dictionary<Vector2Int, TileBase>> roomTilemaps;
+    public Dictionary<Vector2Int, TileBase> tilesPosition = new Dictionary<Vector2Int, TileBase>();
+    public List<Dictionary<Vector2Int, TileBase>> roomTilemaps = new List<Dictionary<Vector2Int, TileBase>>();
     public TileBase startingBase;
 
     public RuntimeRoom testRuntimeRoom;
@@ -46,9 +47,13 @@ public class Room : MonoBehaviour {
             }
             
         }
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.X))
         {
             ResetRoom();
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ReadLayer(0);
         }
     }
 
@@ -94,6 +99,7 @@ public class Room : MonoBehaviour {
 
     public void ResetRoom()
     {
+        canReadLayers = false;
         roomID = 0;
         totalLayers = 0;
         roomName = "New Room";
@@ -157,6 +163,58 @@ public class Room : MonoBehaviour {
     {
         roomPosition = new Vector2Int(_position.x, _position.y);
     }
+
+
+    #region //READ LAYERS
+        //Reads layer and ads the tilebase to the dictionary based on passed index
+        public void ReadLayer(int layerIndex)
+        {
+            if (totalLayers > 0)//Makes sure this doesnt die if nothing on the array
+            {
+                for (int i = -roomSize.x / 2; i < roomSize.x / 2; i++)
+                {
+                    for (int j = -roomSize.y / 2; j < roomSize.y / 2; j++)
+                    {
+
+                        Vector3Int tempPos3 = new Vector3Int(i, j, 0);
+                        Vector2Int tempPos2 = new Vector2Int(i, j);
+                        TileBase tempTile = layerTilemaps[layerIndex].GetTile(tempPos3);
+                        tilesPosition.Add(tempPos2, tempTile);
+                        Debug.Log("Tilebase:" + tempTile.ToString() + " placed at:[" + i + "," + j + "]");
+
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log("LayerTilemaps Array is empty");
+            }
+        }
+        //Reads layer and ads the tilebase to the dictionary based on passed Tilemap
+        public void ReadLayer(Tilemap layerToRead)
+        {
+            if (totalLayers > 0)//Makes sure this doesnt die if nothing on the array
+            {
+                for (int i = -roomSize.x / 2; i < roomSize.x / 2; i++)
+                {
+                    for (int j = -roomSize.y / 2; j < roomSize.y / 2; j++)
+                    {
+
+                        Vector3Int tempPos3 = new Vector3Int(i, j, 0);
+                        Vector2Int tempPos2 = new Vector2Int(i, j);
+                        TileBase tempTile = layerToRead.GetTile(tempPos3);
+                        tilesPosition.Add(tempPos2, tempTile);
+                        Debug.Log("Tilebase:" + tempTile.ToString() + " placed at:[" + i + "," + j + "]");
+
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log("LayerTilemaps Array is empty");
+            }
+        }
+    #endregion
 
 }
 
