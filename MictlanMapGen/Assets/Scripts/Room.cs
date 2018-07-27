@@ -21,6 +21,8 @@ public class Room : MonoBehaviour {
     public List<Dictionary<Vector2Int, TileBase>> roomTilemaps;
     public TileBase startingBase;
 
+    //public RuntimeRoom testRuntimeRoom;
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -31,6 +33,14 @@ public class Room : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.S))
         {
             SaveToScriptable();
+        }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            LoadFromScriptable(testRuntimeRoom);
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ResetRoom();
         }
     }
 
@@ -95,13 +105,45 @@ public class Room : MonoBehaviour {
     public void SaveToScriptable()
     {
         //Create Scriptable Object
-        ScriptableObjectUtility.CreateAsset<RuntimeRoom>();
+        RuntimeRoom  newRoom = (RuntimeRoom)ScriptableObjectUtility.CreateAsset<RuntimeRoom>();
+
+        newRoom.roomID = roomID;
+        newRoom.totalLayers = totalLayers;
+        newRoom.roomName = roomName;
+        newRoom.creatorName = creatorName;
+        newRoom.levelType = levelType;
+        newRoom.roomInPath = roomInPath;
+        newRoom.roomType = roomType;
+        newRoom.roomSize = roomSize;
+        newRoom.roomPosition = roomPosition;
+        newRoom.roomTilemaps = roomTilemaps;
+        newRoom.tilesPosition = tilesPosition;
+        newRoom.roomTilemaps = roomTilemaps;
+        //Save collision and trigger layers
+        newRoom.collisionLayer = collisionLayer;
+        newRoom.triggerLayer = triggerLayer;
+
         Debug.Log("Created Room Scriptable Object");
     }
 
-    public void LoadFromScriptable()
+    public void LoadFromScriptable(RuntimeRoom _runtimeRoom)
     {
-
+        roomID = _runtimeRoom.roomID;
+        totalLayers = _runtimeRoom.totalLayers;
+        roomName = _runtimeRoom.roomName;
+        creatorName = _runtimeRoom.creatorName;
+        levelType = _runtimeRoom.levelType;
+        roomInPath = _runtimeRoom.roomInPath;
+        roomType = _runtimeRoom.roomType;
+        roomSize = _runtimeRoom.roomSize;
+        roomPosition = _runtimeRoom.roomPosition;
+        roomTilemaps = _runtimeRoom.roomTilemaps;
+        tilesPosition = _runtimeRoom.tilesPosition;
+        roomTilemaps = _runtimeRoom.roomTilemaps;
+        //Gets the collision and Trigger layers
+        collisionLayer = _runtimeRoom.collisionLayer;
+        triggerLayer = _runtimeRoom.triggerLayer;
     }
+
 }
 
