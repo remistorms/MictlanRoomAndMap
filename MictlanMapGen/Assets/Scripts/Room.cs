@@ -21,7 +21,7 @@ public class Room : MonoBehaviour {
     public List<Dictionary<Vector2Int, TileBase>> roomTilemaps;
     public TileBase startingBase;
 
-    //public RuntimeRoom testRuntimeRoom;
+    public RuntimeRoom testRuntimeRoom;
 
     private void Update()
     {
@@ -36,7 +36,15 @@ public class Room : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.L))
         {
-            LoadFromScriptable(testRuntimeRoom);
+            if (testRuntimeRoom!= null)
+            {
+                LoadFromScriptable(testRuntimeRoom);
+            }
+            else
+            {
+                Debug.Log("NO SCRIPTABLE OBJECT FOUND");
+            }
+            
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -143,6 +151,11 @@ public class Room : MonoBehaviour {
         //Gets the collision and Trigger layers
         collisionLayer = _runtimeRoom.collisionLayer;
         triggerLayer = _runtimeRoom.triggerLayer;
+    }
+
+    public void SetRoomPositionInMap(Vector3Int _position)
+    {
+        roomPosition = new Vector2Int(_position.x, _position.y);
     }
 
 }

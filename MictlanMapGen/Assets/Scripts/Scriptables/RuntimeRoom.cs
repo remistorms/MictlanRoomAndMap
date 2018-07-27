@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-[CreateAssetMenu(fileName = "New Runtime Room", menuName = "RemSO/Rooms")]
+[CreateAssetMenu(fileName = "New Runtime Room", menuName = "RemSO/RoomSO")]
 public class RuntimeRoom : ScriptableObject {
 
     public int roomID;
