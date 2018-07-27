@@ -28,6 +28,10 @@ public class Room : MonoBehaviour {
             CreateNewLayer();
             FillLayer(layerTilemaps[0]);
         }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            SaveToScriptable();
+        }
     }
 
     //Fills the selected tilemap with the starting base tile
@@ -86,6 +90,18 @@ public class Room : MonoBehaviour {
         tilesPosition.Clear();
         roomTilemaps = new List<Dictionary<Vector2Int, TileBase>>();
         roomTilemaps.Clear();
+    }
+
+    public void SaveToScriptable()
+    {
+        //Create Scriptable Object
+        ScriptableObjectUtility.CreateAsset<RuntimeRoom>();
+        Debug.Log("Created Room Scriptable Object");
+    }
+
+    public void LoadFromScriptable()
+    {
+
     }
 }
 
