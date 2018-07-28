@@ -5,6 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class Room : MonoBehaviour {
 
+    bool hasFirstLayer = false;
     bool canReadLayers = false;
     public int roomID;
     public int totalLayers;
@@ -15,6 +16,7 @@ public class Room : MonoBehaviour {
     public RoomType roomType;
     public Vector2Int roomSize;
     public Vector2Int roomPosition;
+    //Level layers
     public Tilemap collisionLayer;
     public Tilemap triggerLayer;
     public List<Tilemap> layerTilemaps;
@@ -29,11 +31,16 @@ public class Room : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Space))
         {
             CreateNewLayer();
-            FillLayer(layerTilemaps[0]);
+            if (!hasFirstLayer)
+            {
+                FillLayer(layerTilemaps[0]);
+            }
+            //
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
             SaveToScriptable();
+            ResetRoom();
         }
         if (Input.GetKeyDown(KeyCode.L))
         {
@@ -53,7 +60,7 @@ public class Room : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.R))
         {
-            ReadLayer(0);
+            ReadAllLayers();
         }
     }
 
@@ -93,6 +100,7 @@ public class Room : MonoBehaviour {
         newLayer.transform.SetParent(transform);
         newLayer.AddComponent<Tilemap>();
         newLayer.AddComponent<TilemapRenderer>();
+        newLayer.GetComponent<TilemapRenderer>().sortingOrder = totalLayers;
         layerTilemaps.Add(newLayer.GetComponent<Tilemap>());
         totalLayers++;
     }
@@ -120,6 +128,7 @@ public class Room : MonoBehaviour {
     {
         //Create Scriptable Object
         RuntimeRoom  newRoom = (RuntimeRoom)ScriptableObjectUtility.CreateAsset<RuntimeRoom>();
+        ReadAllLayers();
 
         newRoom.roomID = roomID;
         newRoom.totalLayers = totalLayers;
@@ -167,7 +176,7 @@ public class Room : MonoBehaviour {
 
     #region //READ LAYERS
         //Reads layer and ads the tilebase to the dictionary based on passed index
-        public void ReadLayer(int layerIndex)
+        void ReadLayer(int layerIndex)
         {
             if (totalLayers > 0)//Makes sure this doesnt die if nothing on the array
             {
@@ -181,9 +190,10 @@ public class Room : MonoBehaviour {
                         TileBase tempTile = layerTilemaps[layerIndex].GetTile(tempPos3);
                         tilesPosition.Add(tempPos2, tempTile);
                         Debug.Log("Tilebase:" + tempTile.ToString() + " placed at:[" + i + "," + j + "]");
-
+                        //yield return null;
                     }
                 }
+            Debug.Log("Finished reading");
             }
             else
             {
@@ -191,7 +201,7 @@ public class Room : MonoBehaviour {
             }
         }
         //Reads layer and ads the tilebase to the dictionary based on passed Tilemap
-        public void ReadLayer(Tilemap layerToRead)
+        void ReadLayer(Tilemap layerToRead)
         {
             if (totalLayers > 0)//Makes sure this doesnt die if nothing on the array
             {
@@ -213,6 +223,16 @@ public class Room : MonoBehaviour {
             {
                 Debug.Log("LayerTilemaps Array is empty");
             }
+        }
+        //Reads all layers including trigger and collision and adds them to the Dictionary
+        public void ReadAllLayers()
+        {
+            for (int i = 0; i < layerTilemaps.Count; i++)
+            {
+                ReadLayer(i);
+            }
+            ReadLayer(collisionLayer); // Collision layer will be saved on the tilesPosition.count -1
+            ReadLayer(triggerLayer);// Trigger layer will be saved on the tilesPosition.count
         }
     #endregion
 
