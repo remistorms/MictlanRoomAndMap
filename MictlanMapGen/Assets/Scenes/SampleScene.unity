@@ -186,7 +186,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1303038644
+--- !u!1001 &617738746
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -227,9 +227,20 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 114920590915958000, guid: 353ec8f3706054845867dafc9b436211,
         type: 2}
-      propertyPath: roomName
+      propertyPath: collisionLayer
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 114920590915958000, guid: 353ec8f3706054845867dafc9b436211,
+        type: 2}
+      propertyPath: triggerLayer
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 114920590915958000, guid: 353ec8f3706054845867dafc9b436211,
+        type: 2}
+      propertyPath: runtimeRoom
+      value: 
+      objectReference: {fileID: 11400000, guid: 61e5591492f1e2d429873c6709a77e34,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 353ec8f3706054845867dafc9b436211, type: 2}
   m_IsPrefabParent: 0
